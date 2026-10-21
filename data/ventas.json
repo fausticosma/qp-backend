@@ -7,8 +7,14 @@
     "dirección": "Av. Colón 3452, Córdoba",
     "pagado": true,
     "productos": [
-      { "id_producto": 1, "cantidad": 1 },
-      { "id_producto": 8, "cantidad": 1 }
+      {
+        "id_producto": 1,
+        "cantidad": 1
+      },
+      {
+        "id_producto": 8,
+        "cantidad": 1
+      }
     ]
   },
   {
@@ -19,7 +25,10 @@
     "dirección": "Bv. San Juan 1120, Córdoba",
     "pagado": true,
     "productos": [
-      { "id_producto": 3, "cantidad": 1 }
+      {
+        "id_producto": 3,
+        "cantidad": 1
+      }
     ]
   },
   {
@@ -30,8 +39,14 @@
     "dirección": "Duarte Quirós 890, Córdoba",
     "pagado": false,
     "productos": [
-      { "id_producto": 4, "cantidad": 2 },
-      { "id_producto": 5, "cantidad": 1 }
+      {
+        "id_producto": 4,
+        "cantidad": 2
+      },
+      {
+        "id_producto": 5,
+        "cantidad": 1
+      }
     ]
   },
   {
@@ -42,8 +57,14 @@
     "dirección": "Av. Rafael Núñez 2233, Córdoba",
     "pagado": true,
     "productos": [
-      { "id_producto": 9, "cantidad": 1 },
-      { "id_producto": 6, "cantidad": 1 }
+      {
+        "id_producto": 9,
+        "cantidad": 1
+      },
+      {
+        "id_producto": 6,
+        "cantidad": 1
+      }
     ]
   },
   {
@@ -54,7 +75,10 @@
     "dirección": "Av. Colón 3452, Córdoba",
     "pagado": true,
     "productos": [
-      { "id_producto": 2, "cantidad": 1 }
+      {
+        "id_producto": 2,
+        "cantidad": 1
+      }
     ]
   },
   {
@@ -65,8 +89,56 @@
     "dirección": "Bv. San Juan 1120, Córdoba",
     "pagado": false,
     "productos": [
-      { "id_producto": 7, "cantidad": 2 },
-      { "id_producto": 4, "cantidad": 1 }
+      {
+        "id_producto": 7,
+        "cantidad": 2
+      },
+      {
+        "id_producto": 4,
+        "cantidad": 1
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "id_usuario": 1,
+    "fecha": "2026-10-20",
+    "total": 8500,
+    "dirección": "almaraz 8671",
+    "pagado": false,
+    "productos": [
+      {
+        "id_producto": 2,
+        "cantidad": 1
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "id_usuario": 1,
+    "fecha": "2026-10-20",
+    "total": 14400,
+    "dirección": "almaraz 8671",
+    "pagado": false,
+    "productos": [
+      {
+        "id_producto": 8,
+        "cantidad": 3
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "id_usuario": 1,
+    "fecha": "2026-10-20",
+    "total": 8500,
+    "dirección": "almaraz 8671",
+    "pagado": false,
+    "productos": [
+      {
+        "id_producto": 2,
+        "cantidad": 1
+      }
     ]
   }
 ]
