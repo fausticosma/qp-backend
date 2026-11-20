@@ -1,6 +1,24 @@
-# Rutas de la API — Qué Pancito git
+# Rutas de la API — Qué Pancito
 
 Base URL local: `http://localhost:3000`
+
+## Cómo correr el proyecto
+
+1. `npm install`
+2. Completar el `.env` (`MONGODB_URI`, `JWT_SECRET`, `PORT`).
+3. Cargar los datos iniciales en MongoDB (productos, usuarios con contraseña hasheada y ventas): `node utils/seed.js`
+4. `npm start`
+
+> Ojo: `seed.js` borra y vuelve a cargar las tres colecciones.
+
+## Autenticación
+
+- Las contraseñas se guardan hasheadas con **bcrypt**. Nunca se devuelven en las respuestas.
+- Al loguearse se recibe un **token JWT**. Las acciones de usuario logueado (comprar) lo exigen en el header:
+
+```
+Authorization: Bearer <token>
+```
 
 ## Productos
 
@@ -19,7 +37,7 @@ Devuelve un producto puntual por id.
 ## Usuarios
 
 ### POST /api/usuarios
-Registra un usuario nuevo.
+Registra un usuario nuevo. La contraseña se guarda hasheada.
 - Body (JSON):
 ```json
 {
@@ -56,7 +74,7 @@ Elimina un usuario, respetando la integridad con sus ventas.
 ## Login
 
 ### POST /api/login
-Autentica un usuario. Parámetros sensibles.
+Autentica un usuario y devuelve un token JWT.
 - Body (JSON):
 ```json
 {
@@ -64,7 +82,7 @@ Autentica un usuario. Parámetros sensibles.
   "contraseña": "fc2026$Pan"
 }
 ```
-- Respuesta 200: `{ "mensaje": "Login exitoso", "usuario": {...} }` (sin contraseña)
+- Respuesta 200: `{ "mensaje": "Login exitoso", "token": "eyJ...", "usuario": {...} }` (sin contraseña)
 - Respuesta 401: email o contraseña incorrectos.
 - Respuesta 403: usuario inactivo.
 
@@ -76,12 +94,11 @@ Lista todas las ventas. Filtro opcional por usuario.
 - Ejemplo: `GET /api/ventas?id_usuario=1`
 - Respuesta 200: array de ventas.
 
-### POST /api/ventas
-Crea una venta nueva. Calcula el total automáticamente según los productos y valida que el usuario y los productos existan.
+### POST /api/ventas 🔒
+**Requiere token JWT** (`Authorization: Bearer <token>`). El usuario de la venta se toma del token, por lo que no hace falta mandar `id_usuario`. Calcula el total automáticamente según los productos y valida que el usuario y los productos existan.
 - Body (JSON):
 ```json
 {
-  "id_usuario": 2,
   "dirección": "Av. Colón 1500, Córdoba",
   "productos": [
     { "id_producto": 1, "cantidad": 1 },
@@ -91,10 +108,11 @@ Crea una venta nueva. Calcula el total automáticamente según los productos y v
 ```
 - Respuesta 201: venta creada (con `id`, `fecha`, `total` y `pagado: false` calculados por el servidor).
 - Respuesta 400: faltan datos o el array de productos está vacío.
+- Respuesta 401: falta el token, o es inválido o está vencido.
 - Respuesta 404: el usuario o alguno de los productos no existe.
 
 ---
 
 ## Resumen de integridad referencial
 
-Al eliminar un usuario (`DELETE /api/usuarios/:id`), el servidor chequea si existen ventas en `ventas.json` con ese `id_usuario`. Si las hay, rechaza el borrado (409) salvo que se pida explícitamente `?forzar=true`, en cuyo caso elimina primero las ventas relacionadas y después el usuario, evitando dejar ventas con un `id_usuario` inexistente.
+Al eliminar un usuario (`DELETE /api/usuarios/:id`), el servidor chequea si existen ventas en la colección de ventas de MongoDB con ese `id_usuario`. Si las hay, rechaza el borrado (409) salvo que se pida explícitamente `?forzar=true`, en cuyo caso elimina primero las ventas relacionadas y después el usuario, evitando dejar ventas con un `id_usuario` inexistente.
