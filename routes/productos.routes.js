@@ -1,35 +1,40 @@
 import express from 'express';
-import { leerData } from '../utils/db.js';
+import Producto from '../schemas/producto.js';
 
 const router = express.Router();
 
 // GET /api/productos
 // GET /api/productos?categoria=tortas
-router.get('/', (req, res) => {
-  const productos = leerData('productos.json');
-  const { categoria } = req.query;
+router.get('/', async (req, res) => {
+  try {
+    const { categoria } = req.query;
+    const filtro = categoria ? { categoria: categoria.toLowerCase() } : {};
 
-  if (categoria) {
-    const filtrados = productos.filter(
-      (p) => p.categoria.toLowerCase() === categoria.toLowerCase()
-    );
-    return res.json(filtrados);
+    const productos = await Producto.find(filtro)
+      .select('-_id -__v')
+      .sort({ id: 1 })
+      .lean();
+
+    res.json(productos);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener los productos' });
   }
-
-  res.json(productos);
 });
 
 // GET /api/productos/:id
-router.get('/:id', (req, res) => {
-  const productos = leerData('productos.json');
-  const id = Number(req.params.id);
-  const producto = productos.find((p) => p.id === id);
+router.get('/:id', async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const producto = await Producto.findOne({ id }).select('-_id -__v').lean();
 
-  if (!producto) {
-    return res.status(404).json({ error: `No existe un producto con id ${id}` });
+    if (!producto) {
+      return res.status(404).json({ error: `No existe un producto con id ${id}` });
+    }
+
+    res.json(producto);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener el producto' });
   }
-
-  res.json(producto);
 });
 
 export default router;

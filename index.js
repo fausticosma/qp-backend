@@ -1,3 +1,4 @@
+import { conectarDB } from './utils/mongo.js';
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
@@ -25,6 +26,7 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Ruta no encontrada.' });
 });
 
+await conectarDB();
 app.listen(PORT, () => {
   console.log(`Servidor Qué Pancito corriendo en http://localhost:${PORT}`);
 });
